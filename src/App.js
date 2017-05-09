@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import Tree from "./Tree.js";
+import Tree from "./components/tree.js";
 import { Row, Col, FormControl, Button } from "react-bootstrap";
 import { LevelButton } from "./components/levelbutton.js";
 import { unflatten } from "./components/utils.js";
@@ -26,6 +26,7 @@ class App extends Component {
   componentDidMount() {
     let array = this.state.array;
     let tree = unflatten(array);
+    console.log(tree)
     this.setState({ tree });
   }
 
