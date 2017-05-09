@@ -32,7 +32,7 @@ class App extends Component {
   changeLevel = id => {
     let array = this.state.array;
     let selectedLevel = array.filter(item => item.id === id);
-    this.setState({ selectedId: id, selectedLevel: selectedLevel[0].name});
+    this.setState({ selectedId: id, selectedLevel: selectedLevel[0].name });
   };
 
   handleChange = e => {
