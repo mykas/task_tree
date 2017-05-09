@@ -8,14 +8,14 @@ class Tree extends Component {
         <ul>
           {this.props.data.map((branch, index) => (
             <li key={index}>
-              {branch.id}
+              {branch.name}
               {branch.children && <Tree data={branch.children} />}
             </li>
           ))}
         </ul>
       );
     }
-    return <div> { content }</div>;
+    return <div> {content}</div>;
   }
 }
 export default Tree;

@@ -1,62 +1,86 @@
 import React, { Component } from "react";
 import "./App.css";
-import Tree from './Tree.js'
-import {Row, Col, FormControl} from 'react-bootstrap'
-import Button from './components/button.js'
-import {unflatten} from './components/utils.js'
-
-
+import Tree from "./Tree.js";
+import { Row, Col, FormControl, Button } from "react-bootstrap";
+import { LevelButton } from "./components/levelbutton.js";
+import { unflatten } from "./components/utils.js";
 
 class App extends Component {
   state = {
     array: [
-      { id: 1, parentid: 0 },
-      { id: 2, parentid: 1 },
-      { id: 3, parentid: 1 },
-      { id: 4, parentid: 2 },
-      { id: 5, parentid: 0 },
-      { id: 6, parentid: 0 },
-      { id: 7, parentid: 4 }
+      { id: 1, name: "Lietuva", parentid: 0 },
+      { id: 2, name: "Vilnius", parentid: 1 },
+      { id: 3, name: "Kaunas", parentid: 1 },
+      { id: 4, name: "Naujininkai", parentid: 2 },
+      { id: 5, name: "Latvija", parentid: 0 },
+      { id: 6, name: "Estija", parentid: 0 },
+      { id: 7, name: "Eisiskiu pl.", parentid: 4 }
     ],
     tree: null,
-    list: null
+    list: null,
+    value: "",
+    selectedId: "",
+    selectedLevel: "Select Level"
   };
+
   componentDidMount() {
-    console.log(this.state.array)
-    let tree = unflatten(this.state.array)
-
-    this.setState({tree})
-  }
-  changeLevel(id,e) {
-     console.log(e.target)
-     this.setState({ value: e.target.value });
+    let array = this.state.array;
+    let tree = unflatten(array);
+    this.setState({ tree });
   }
 
-  addNode() {
+  changeLevel = id => {
+    let array = this.state.array;
+    let selectedLevel = array.filter(item => item.id === id);
+    this.setState({ selectedId: id, selectedLevel: selectedLevel[0].name});
+  };
 
-  }
+  handleChange = e => {
+    this.setState({ value: e.target.value });
+  };
+
+  handleClick = () => {
+    let newArray = this.state.array;
+    let generateId = Math.max.apply(Math, newArray.map(item => item.id)) + 1;
+    newArray.push({
+      id: generateId,
+      name: this.state.value,
+      parentid: this.state.selectedId
+    });
+    let tree = unflatten(newArray);
+    this.setState({ array: newArray, tree });
+  };
+
   render() {
     return (
       <div className="App-container">
+        <Tree data={this.state.tree} />
         <Row>
-          <Tree data={this.state.tree}/>
-          <Button list={this.state.list} changeLevel={this.changeLevel}/>
-          <Col md={3}>
+          <Col md={2}>
+            <LevelButton
+              list={this.state.array}
+              changeLevel={this.changeLevel}
+              selectedLevel={this.state.selectedLevel}
+            />
+          </Col>
+          <Col md={2}>
             <FormControl
-             type="text"
-             value="Current Value"
-             placeholder="Enter text"
-             onClick={this.addNode}
-           />
+              type="text"
+              value={this.state.value}
+              placeholder="Enter text"
+              onChange={this.handleChange}
+            />
+          </Col>
+          <Col md={2}>
+            <Button bsStyle="primary" onClick={this.handleClick}>
+              Add
+            </Button>
           </Col>
         </Row>
-
 
       </div>
     );
   }
 }
-
-
 
 export default App;
